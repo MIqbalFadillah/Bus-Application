@@ -26,7 +26,7 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
-    private EditText mEdtEmail, mEdtPassword;
+    private EditText mEdtUserName, mEdtPassword;
     private Button mBtnLogin, mBtnRegister;
     private ConstraintLayout bottom_sheet;
     private SessionManager sessionManager;
@@ -59,16 +59,16 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void loginAPI(){
-        final String user_email = mEdtEmail.getText().toString();
+        final String user_name = mEdtUserName.getText().toString();
               String user_password = mEdtPassword.getText().toString();
 
         sessionManager = new SessionManager(this);
 
-        if (user_email.isEmpty() || user_password.isEmpty()){
+        if (user_name.isEmpty() || user_password.isEmpty()){
             showLoading(false);
             Toast.makeText(LoginActivity.this, "email user or password blank!!!", Toast.LENGTH_SHORT).show();
         }else {
-            LoginRequest loginRequest = new LoginRequest(user_email, user_password);
+            LoginRequest loginRequest = new LoginRequest(user_name, user_password);
             ApiServices apiServices = NetworkService.getRetrofit().create(ApiServices.class);
 
             apiServices.getToken(loginRequest).enqueue(new Callback<LoginResponse>() {
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.isSuccessful() && response.body() != null){
                         loginResponse = response.body();
                         sId = loginResponse.getId();
-                        sUsername = loginResponse.getUsername();
+                        sUsername = mEdtUserName.getText().toString();
                         sToken = loginResponse.getToken();
                         saveToken();
                         showLoading(false);
@@ -131,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initView(){
 
-        mEdtEmail = findViewById(R.id.edt_username);
+        mEdtUserName = findViewById(R.id.edt_username);
         mEdtPassword = findViewById(R.id.edt_password);
         mBtnLogin = findViewById(R.id.btn_login);
         mBtnRegister = findViewById(R.id.btn_register);

@@ -9,7 +9,7 @@ public class SessionManager {
 
     public static String USER_PREF = "user_pref";
     public static String USER_TOKEN = "user_token";
-    public static int USER_ID ;
+    public static String USER_ID = "user_id" ;
     public static String USER_NAME = "user_name";
 
 
@@ -20,11 +20,12 @@ public class SessionManager {
         sharedPreferences = context.getSharedPreferences(USER_PREF,Context.MODE_PRIVATE);
     }
 
-    public void saveAuthToken(LoginResponse loginResponse){
+    public void saveAuthToken(LoginResponse mResponse){
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(USER_TOKEN, loginResponse.token );
-        editor.putString(USER_NAME, loginResponse.username );
-        editor.putInt(String.valueOf(USER_ID), loginResponse.id );
+        editor.putString(USER_TOKEN, mResponse.token );
+        editor.putString(USER_NAME, mResponse.username );
+        editor.putInt(USER_ID , mResponse.id );
+        editor.apply();
 
     }
 
