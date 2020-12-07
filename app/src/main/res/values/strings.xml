@@ -17,4 +17,13 @@
     
     <string name="login">Login</string>
     <string name="register">Register</string>
+
+
+<!--    Jadwal List String-->
+    <string name="bus_name">Nama Bus</string>
+    <string name="bus_police_number">No Polisi </string>
+    <string name="bus_seat_total">Sisa Kursi</string>
+    <string name="bus_city_from">Cikarang</string>
+    <string name="bus_city_to">DI Yogyakarta</string>
+    <string name="bus_due_date">2002011</string>
 </resources>

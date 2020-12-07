@@ -1,35 +1,121 @@
 package com.example.busapplication.ui.home;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.busapplication.R;
+import com.example.busapplication.data.api.ApiServices;
+import com.example.busapplication.data.api.NetworkService;
+import com.example.busapplication.data.model.JadwalItems;
+import com.example.busapplication.data.repository.SessionManager;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.example.busapplication.data.repository.SessionManager.USER_ID;
+import static com.example.busapplication.data.repository.SessionManager.USER_TOKEN;
 
 public class HomeFragment extends Fragment {
 
+    private String fetchToken;
+    private int fetchId;
+    private Context context;
+
+    private RecyclerView rv_jadwal_data;
+    private View view;
+    private List <JadwalItems> jadwalItemsList;
+    private ProgressBar progressBar;
+
     private HomeViewModel homeViewModel;
+
+    private HomeAdapter adapter;
+
+
+
+    public HomeFragment(){
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        view = inflater.inflate(R.layout.fragment_home,container,false);
+        context = view.getContext();
+
+        SessionManager sessionManager = new SessionManager(getActivity());
+        if (sessionManager != null){
+            fetchToken = sessionManager.sharedPreferences.getString(USER_TOKEN,"");
+            fetchId = sessionManager.sharedPreferences.getInt(USER_ID,0);
+        }
+
+
+        rv_jadwal_data = view.findViewById(R.id.rv_jadwal_list);
+        rv_jadwal_data.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rv_jadwal_data.setHasFixedSize(true);
+        rv_jadwal_data.setAdapter(adapter);
+
+        initView();
+        showLoading(true);
+
+        loadDataUrl();
+
+
+        return view;
+    }
+
+    private void loadDataUrl() {
+
+        ApiServices apiServices = NetworkService.getRetrofit().create(ApiServices.class);
+        apiServices.getJadwal(fetchId,fetchToken).enqueue(new Callback<List<JadwalItems>>() {
             @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
+            public void onResponse(Call<List<JadwalItems>> call, Response<List<JadwalItems>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    showLoading(false);
+                    jadwalItemsList = response.body();
+                    adapter = new HomeAdapter(jadwalItemsList, getActivity());
+                    rv_jadwal_data.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+
+                }
+                else{
+                    Toast.makeText(getActivity(),"Failed Load Data !!!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<JadwalItems>> call, Throwable t) {
+                Toast.makeText(getActivity(),"Error\n"+toString(), Toast.LENGTH_SHORT).show();
             }
         });
-        return root;
+
+    }
+
+
+    private void showLoading(Boolean state){
+        if (state){
+            progressBar.setVisibility(View.VISIBLE);
+        }
+        else{
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    private void initView(){
+        progressBar = view.findViewById(R.id.progressBar);
     }
 }
