@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -62,6 +63,7 @@ public class HomeFragment extends Fragment {
             fetchToken = sessionManager.sharedPreferences.getString(USER_TOKEN,"");
             fetchId = sessionManager.sharedPreferences.getInt(USER_ID,0);
         }
+        homeViewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(HomeViewModel.class);
 
 
         rv_jadwal_data = view.findViewById(R.id.rv_jadwal_list);
@@ -104,6 +106,11 @@ public class HomeFragment extends Fragment {
         });
 
     }
+
+    homeViewModel.
+
+
+
 
 
     private void showLoading(Boolean state){

@@ -125,9 +125,5 @@ public class JadwalItems {
         this.tgl_perjalanan = tgl_perjalanan;
     }
 //
-//    //MVVM
-    void loadDataURl(){
 
-
-    }
 }
