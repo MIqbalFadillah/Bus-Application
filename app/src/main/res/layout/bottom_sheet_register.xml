@@ -19,7 +19,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="8dp"
         android:textColorHint="@color/grey"
-        android:hint="@string/email_user"/>
+        android:hint="@string/user_name"/>
 
     <EditText
         android:id="@+id/SignUp_edt_password"

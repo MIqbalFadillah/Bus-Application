@@ -19,7 +19,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     private List<JadwalItems> jadwalItemsList;
     private Context context;
-
+//
     public HomeAdapter(List jadwalItemsList, Context context){
         this.jadwalItemsList = jadwalItemsList;
         this.context = context;

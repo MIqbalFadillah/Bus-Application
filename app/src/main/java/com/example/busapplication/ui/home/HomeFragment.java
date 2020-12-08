@@ -58,6 +58,8 @@ public class HomeFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_home,container,false);
         context = view.getContext();
 
+        homeViewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(HomeViewModel.class);
+
         SessionManager sessionManager = new SessionManager(getActivity());
         if (sessionManager != null){
             fetchToken = sessionManager.sharedPreferences.getString(USER_TOKEN,"");
@@ -68,16 +70,40 @@ public class HomeFragment extends Fragment {
 
         rv_jadwal_data = view.findViewById(R.id.rv_jadwal_list);
         rv_jadwal_data.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        adapter = new HomeAdapter(jadwalItemsList,getActivity());
+        adapter.notifyDataSetChanged();
         rv_jadwal_data.setHasFixedSize(true);
         rv_jadwal_data.setAdapter(adapter);
 
         initView();
         showLoading(true);
 
-        loadDataUrl();
+        homeViewModel.setFetchToken(fetchToken,fetchId);
+        homeViewModel.GetDataJadwal(jadwalItemsList);
+        getJadwal();
+
+
+        //loadDataUrl();
+
 
 
         return view;
+    }
+
+    private void getJadwal(){
+        homeViewModel.getJadwalList().observe(this, new Observer<List<JadwalItems>>() {
+            @Override
+            public void onChanged(List<JadwalItems> jadwalItems) {
+                if (jadwalItems != null){
+                    adapter.setDataJadwal(jadwalItems);
+                    showLoading(false);
+                }
+                else {
+                    Toast.makeText(getActivity(),"Failed Load Data !!!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void loadDataUrl() {
@@ -89,7 +115,7 @@ public class HomeFragment extends Fragment {
                 if(response.isSuccessful() && response.body() != null) {
                     showLoading(false);
                     jadwalItemsList = response.body();
-                    adapter = new HomeAdapter(jadwalItemsList, getActivity());
+//                    adapter = new HomeAdapter(jadwalItemsList, getActivity());
                     rv_jadwal_data.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
 
@@ -106,10 +132,6 @@ public class HomeFragment extends Fragment {
         });
 
     }
-
-    homeViewModel.
-
-
 
 
 

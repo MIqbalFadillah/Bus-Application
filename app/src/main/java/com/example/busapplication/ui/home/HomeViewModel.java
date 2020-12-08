@@ -26,15 +26,23 @@ public class HomeViewModel extends ViewModel {
     private MutableLiveData<List<JadwalItems>> listJadwal = new MutableLiveData<>();
 
     private SessionManager sessionManager;
-    private static String fetchToken;
-    private static int fetchId;
     private List <JadwalItems> jadwalItemsList;
     private Context context;
+    private String fetchToken;
+    private int fetchId;
+//    private HomeAdapter adapter;
 
+    public void setFetchToken( String getToken, int getId){
+        this.fetchToken = getToken;
+        this.fetchId = getId;
+    }
     //    //MVVM
-    void GetDataJadwal(){
-        fetchId = sessionManager.sharedPreferences.getInt(USER_ID,0);
-        fetchToken = sessionManager.sharedPreferences.getString(USER_TOKEN,"");
+    void GetDataJadwal(List<JadwalItems> dataItemJadwal){
+
+//        SessionManager sessionManager = new SessionManager(context);
+
+//        fetchToken = sessionManager.sharedPreferences.getString(USER_TOKEN,"");
+//        fetchId = sessionManager.sharedPreferences.getInt(USER_ID,0);
 
         ApiServices apiServices = NetworkService.getRetrofit().create(ApiServices.class);
         apiServices.getJadwal(fetchId,fetchToken).enqueue(new Callback<List<JadwalItems>>() {
@@ -42,6 +50,9 @@ public class HomeViewModel extends ViewModel {
             public void onResponse(Call<List<JadwalItems>> call, Response<List<JadwalItems>> response) {
                 if(response.isSuccessful() && response.body() != null) {
                     jadwalItemsList = response.body();
+//                    adapter = new HomeAdapter(jadwalItemsList, getActivity());
+//                    rv_jadwal_data.setAdapter(adapter);
+//                    adapter.notifyDataSetChanged();
                     listJadwal.postValue(jadwalItemsList);
 
                 }
