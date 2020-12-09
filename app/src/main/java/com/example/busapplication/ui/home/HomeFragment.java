@@ -71,8 +71,8 @@ public class HomeFragment extends Fragment {
         rv_jadwal_data = view.findViewById(R.id.rv_jadwal_list);
         rv_jadwal_data.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter = new HomeAdapter(jadwalItemsList,getActivity());
-        adapter.notifyDataSetChanged();
+//        adapter = new HomeAdapter(jadwalItemsList,getActivity());
+//        adapter.notifyDataSetChanged();
         rv_jadwal_data.setHasFixedSize(true);
         rv_jadwal_data.setAdapter(adapter);
 
@@ -96,7 +96,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onChanged(List<JadwalItems> jadwalItems) {
                 if (jadwalItems != null){
-                    adapter.setDataJadwal(jadwalItems);
+                    adapter = new HomeAdapter(jadwalItems, getActivity());
+                    rv_jadwal_data.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+//                    adapter.setDataJadwal(jadwalItems);
                     showLoading(false);
                 }
                 else {
