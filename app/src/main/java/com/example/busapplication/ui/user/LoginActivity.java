@@ -1,4 +1,4 @@
-package com.example.busapplication.ui.login;
+package com.example.busapplication.ui.user;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;

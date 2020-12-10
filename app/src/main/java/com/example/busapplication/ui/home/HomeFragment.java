@@ -79,19 +79,16 @@ public class HomeFragment extends Fragment {
         initView();
         showLoading(true);
 
-        homeViewModel.setFetchToken(fetchToken,fetchId);
-        homeViewModel.GetDataJadwal(jadwalItemsList);
-        getJadwal();
+        homeViewModel.GetDataJadwal(fetchToken,fetchId);
+        viewModelJadwal();
 
 
         //loadDataUrl();
 
-
-
         return view;
     }
 
-    private void getJadwal(){
+    private void viewModelJadwal(){
         homeViewModel.getJadwalList().observe(this, new Observer<List<JadwalItems>>() {
             @Override
             public void onChanged(List<JadwalItems> jadwalItems) {
@@ -99,7 +96,6 @@ public class HomeFragment extends Fragment {
                     adapter = new HomeAdapter(jadwalItems, getActivity());
                     rv_jadwal_data.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-//                    adapter.setDataJadwal(jadwalItems);
                     showLoading(false);
                 }
                 else {

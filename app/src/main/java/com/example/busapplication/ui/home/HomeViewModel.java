@@ -32,12 +32,8 @@ public class HomeViewModel extends ViewModel {
     private int fetchId;
 //    private HomeAdapter adapter;
 
-    public void setFetchToken( String getToken, int getId){
-        this.fetchToken = getToken;
-        this.fetchId = getId;
-    }
     //    //MVVM
-    void GetDataJadwal(List<JadwalItems> dataItemJadwal){
+    void GetDataJadwal(String fetchToken, int fetchId){
 
 //        SessionManager sessionManager = new SessionManager(context);
 
@@ -50,11 +46,7 @@ public class HomeViewModel extends ViewModel {
             public void onResponse(Call<List<JadwalItems>> call, Response<List<JadwalItems>> response) {
                 if(response.isSuccessful() && response.body() != null) {
                     jadwalItemsList = response.body();
-//                    adapter = new HomeAdapter(jadwalItemsList, getActivity());
-//                    rv_jadwal_data.setAdapter(adapter);
-//                    adapter.notifyDataSetChanged();
                     listJadwal.postValue(jadwalItemsList);
-
                 }
                 else{
                     Toast.makeText(context,"Failed Load Data !!!", Toast.LENGTH_SHORT).show();

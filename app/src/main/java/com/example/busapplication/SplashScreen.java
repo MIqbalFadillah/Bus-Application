@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.example.busapplication.ui.login.LoginActivity;
+import com.example.busapplication.ui.user.LoginActivity;
 
 public class SplashScreen extends AppCompatActivity {
     private int time_load=4000;
