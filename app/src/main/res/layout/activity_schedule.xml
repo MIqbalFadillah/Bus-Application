@@ -1,30 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:padding="30dp"
     tools:context=".ui.schedule.ScheduleActivity">
 
-    <RelativeLayout
+    <EditText
+        android:id="@+id/edt_sc_name_bus"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:ems="10"
+        android:background="@drawable/cutom_input_text"
+        android:hint="@string/add_bus_name"
+        android:inputType="text"
+        android:textSize="14sp"
+        android:paddingStart="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <EditText
+        android:id="@+id/edt_sc_police_bus"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingStart="12sp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:ems="10"
+        android:hint="@string/add_bus_police"
+        android:inputType="text"
+        android:background="@drawable/cutom_input_text"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_sc_name_bus"/>
+    
+    <Spinner
+        android:id="@+id/spinner_Seat"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:spinnerMode="dropdown"
+        android:entries="@array/spinner_seat"
+        android:background="@drawable/custom_spinner_outline"
+        android:popupBackground="@drawable/custom_spinner_outline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_sc_police_bus"/>
+
+    <ImageView
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_baseline_arrow_drop_down"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_sc_police_bus" />
+
+    <EditText
+        android:id="@+id/edt_sc_from_to"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:ems="10"
+        android:hint="@string/add_bus_city_from"
+        android:inputType="text"
+        android:textSize="14sp"
+        android:paddingStart="12sp"
+        android:background="@drawable/cutom_input_text"
+        android:layout_marginRight="190dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spinner_Seat"/>
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_baseline_line_cursor_right"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spinner_Seat" />
+
+    <EditText
+        android:id="@+id/edt_sc_go_to"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/cutom_input_text"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:ems="10"
+        android:hint="@string/add_bus_city_went"
+        android:inputType="text"
+        android:textSize="14sp"
+        android:paddingStart="12sp"
+        android:layout_marginLeft="190dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spinner_Seat"/>
+
+    <EditText
+        android:id="@+id/edt_sc_date_bus_go"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:ems="10"
+        android:hint="@string/bus_due_date"
+        android:inputType="text"
+        android:textSize="14sp"
+        android:paddingStart="12sp"
+        android:background="@drawable/cutom_input_text"
+        android:drawableEnd="@drawable/ic_baseline_date_range"
+        android:paddingEnd="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_sc_from_to"/>
+
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent">
+        android:layout_marginTop="32dp"
+        android:text="Add Schedule"
+        android:background="@drawable/radius_button"
+        app:layout_constraintTop_toBottomOf="@id/edt_sc_date_bus_go"/>
 
-        <TextView
-            android:id="@+id/tst"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="test"
-            android:textSize="26sp"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="sss"
-            android:layout_toRightOf="@id/tst"/>
 
-    </RelativeLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

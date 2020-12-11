@@ -26,4 +26,16 @@
     <string name="bus_city_from">Cikarang</string>
     <string name="bus_city_to">DI Yogyakarta</string>
     <string name="bus_due_date">2002011</string>
+
+    <string name="add_bus_name">Masukan nama Bus</string>
+    <string name="add_bus_police">Masukan Nomer Polisi</string>
+    <string name="add_bus_seat">Tipe Kursi</string>
+    <string name="add_bus_city_from">Kota Asal</string>
+    <string name="add_bus_city_went">Kota Tujuan</string>
+
+    <string-array name="spinner_seat">
+        <item>2-2</item>
+        <item>2-3</item>
+    </string-array>
+
 </resources>
