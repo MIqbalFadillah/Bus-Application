@@ -18,4 +18,8 @@ public interface ApiServices {
     @GET("jadwal")
     Call<List<JadwalItems>> getJadwal(@Header("User-ID") int id,
                                      @Header("Token") String token);
+
+    @POST("jadwal/create")
+    Call<List<JadwalItems>> createJadwal(@Header("User-ID") int id,
+                                      @Header("Token") String token);
 }
