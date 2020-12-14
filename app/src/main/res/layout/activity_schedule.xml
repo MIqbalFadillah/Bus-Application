@@ -41,7 +41,7 @@
     <Spinner
         android:id="@+id/spinner_Seat"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="40dp"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:spinnerMode="dropdown"
         android:entries="@array/spinner_seat"
@@ -53,7 +53,7 @@
 
     <ImageView
         android:layout_width="26dp"
-        android:layout_height="26dp"
+        android:layout_height="20dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginTop="24dp"
@@ -61,6 +61,22 @@
         android:src="@drawable/ic_baseline_arrow_drop_down"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edt_sc_police_bus" />
+
+    <EditText
+        android:id="@+id/edt_sc_seat_bus"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:paddingStart="12sp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:ems="10"
+        android:hint="@string/add_bus_seat"
+        android:inputType="text"
+        android:background="@drawable/cutom_input_text"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spinner_Seat"/>
 
     <EditText
         android:id="@+id/edt_sc_from_to"
@@ -78,7 +94,7 @@
         app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinner_Seat"/>
+        app:layout_constraintTop_toBottomOf="@id/edt_sc_seat_bus"/>
 
     <ImageView
         android:layout_width="20dp"
@@ -91,7 +107,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinner_Seat" />
+        app:layout_constraintTop_toBottomOf="@id/edt_sc_seat_bus" />
 
     <EditText
         android:id="@+id/edt_sc_go_to"
@@ -108,7 +124,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinner_Seat"/>
+        app:layout_constraintTop_toBottomOf="@id/edt_sc_seat_bus"/>
 
     <EditText
         android:id="@+id/edt_sc_date_bus_go"
@@ -129,6 +145,7 @@
         app:layout_constraintTop_toBottomOf="@id/edt_sc_from_to"/>
 
     <Button
+        android:id="@+id/btn_jadwal_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
