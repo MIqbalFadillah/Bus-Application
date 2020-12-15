@@ -8,7 +8,7 @@ public class SeatItems {
     @SerializedName("kapasitas_kursi")
     private int kapasitas_kursi;
     @SerializedName("jenis_kursi")
-    private int jenis_kursi;
+    private String jenis_kursi;
     @SerializedName("kode_seat")
     private String kode_seat;
 
@@ -29,11 +29,11 @@ public class SeatItems {
         this.kapasitas_kursi = kapasitas_kursi;
     }
 
-    public int getJenis_kursi() {
+    public String getJenis_kursi() {
         return jenis_kursi;
     }
 
-    public void setJenis_kursi(int jenis_kursi) {
+    public void setJenis_kursi(String jenis_kursi) {
         this.jenis_kursi = jenis_kursi;
     }
 

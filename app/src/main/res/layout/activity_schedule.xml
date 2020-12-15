@@ -154,5 +154,16 @@
         app:layout_constraintTop_toBottomOf="@id/edt_sc_date_bus_go"/>
 
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TES"
+        android:textSize="30sp"
+        android:id="@+id/testS"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_jadwal_add"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

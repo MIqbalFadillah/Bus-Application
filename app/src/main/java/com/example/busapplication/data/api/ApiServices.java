@@ -18,7 +18,7 @@ public interface ApiServices {
     @POST("auth/login")
     Call<LoginResponse> getToken(@Body LoginRequest loginRequest);
     @GET("kursi/detail/{query}")
-    Call<List<SeatItems>> getSeat(@Header("User-ID") int id,
+    Call<SeatItems> getSeat(@Header("User-ID") int id,
                                   @Header("Token") String token,
                                   @Path("query") String query);
     @GET("jadwal")

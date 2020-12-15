@@ -34,7 +34,7 @@
     <string name="add_bus_city_went">Kota Tujuan</string>
 
     <string-array name="spinner_seat">
-        <string>Tipe Kursi</string>
+        <item>Tipe Kursi</item>
         <item>2-2</item>
         <item>2-3</item>
     </string-array>

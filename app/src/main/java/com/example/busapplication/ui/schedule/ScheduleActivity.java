@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.busapplication.R;
@@ -36,14 +37,14 @@ public class ScheduleActivity extends AppCompatActivity {
             , mEdtDateGo, mCountSeat;
     Button mBtnJadwalAdd;
     Spinner spinner;
-    RecyclerView recyclerView;
-    private HomeAdapter adapter;
+    TextView tst;
 
     private String fetchToken;
     private int fetchId;
+    private int fetchCountSeat;
 
     private String getSeat;
-    private List<SeatItems> seatItems;
+    private SeatItems seatItems;
 
 
     @Override
@@ -55,14 +56,12 @@ public class ScheduleActivity extends AppCompatActivity {
         fetchId = sessionManager.sharedPreferences.getInt(USER_ID,0);
         fetchToken = sessionManager.sharedPreferences.getString(USER_TOKEN, "");
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(adapter);
 
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
-        categories.add("22");
-        categories.add("23");
+        categories.add("Pilih Jenis Kursi");
+        categories.add("2-2");
+        categories.add("2-3");
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories );
 
@@ -72,7 +71,6 @@ public class ScheduleActivity extends AppCompatActivity {
         // attaching data adapter to spinner
         spinner.setAdapter(dataAdapter);
         spinner.setOnItemSelectedListener(spinnerButton);
-
 
     }
 
@@ -87,13 +85,15 @@ public class ScheduleActivity extends AppCompatActivity {
             switch (position) {
                 case 0:
                     getSeat = parent.getItemAtPosition(position).toString();
-                    fetchDataSeat();
                     break;
                 case 1:
                     getSeat = parent.getItemAtPosition(position).toString();
-
+                    fetchDataSeat();
                     break;
-
+                case 2:
+                    getSeat = parent.getItemAtPosition(position).toString();
+                    fetchDataSeat();
+                    break;
 
             }
 
@@ -111,25 +111,26 @@ public class ScheduleActivity extends AppCompatActivity {
     private void fetchDataSeat(){
 
         ApiServices apiServices = NetworkService.getRetrofit().create(ApiServices.class);
-        apiServices.getSeat(fetchId,fetchToken,getSeat).enqueue(new Callback<List<SeatItems>>() {
+        apiServices.getSeat(fetchId,fetchToken,getSeat).enqueue(new Callback<SeatItems>() {
             @Override
-            public void onResponse(Call<List<SeatItems>> call, Response<List<SeatItems>> response) {
-                if(response.isSuccessful() && response.body() != null) {
+            public void onResponse(Call<SeatItems> call, Response<SeatItems> response) {
+                if (response.isSuccessful() && response.body() != null) {
                     seatItems = response.body();
-
+                    fetchCountSeat = seatItems.getKapasitas_kursi();
+                    mCountSeat.setText(String.valueOf(fetchCountSeat));
 
                 }
-                else{
-                    Toast.makeText(ScheduleActivity.this,"Failed Load Data !!!", Toast.LENGTH_SHORT).show();
+                else {
+                    Toast.makeText(ScheduleActivity.this,"FAILED LOAD DATA!!!", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<SeatItems>> call, Throwable t) {
+            public void onFailure(Call<SeatItems> call, Throwable t) {
+                Toast.makeText(ScheduleActivity.this,"CONNECTION FAILED!!!", Toast.LENGTH_SHORT).show();
 
             }
         });
-
     }
 
         private void initView(){
@@ -141,5 +142,6 @@ public class ScheduleActivity extends AppCompatActivity {
         mBtnJadwalAdd = findViewById(R.id.btn_jadwal_add);
         mCountSeat = findViewById(R.id.edt_sc_seat_bus);
         spinner = findViewById(R.id.spinner_Seat);
+        tst = findViewById(R.id.testS);
     }
 }
