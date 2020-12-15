@@ -23,9 +23,10 @@ public interface ApiServices {
                                   @Path("query") String query);
     @GET("jadwal")
     Call<List<JadwalItems>> getJadwal(@Header("User-ID") int id,
-                                     @Header("Token") String token);
+                                      @Header("Token") String token);
 
     @POST("jadwal/create")
-    Call<List<JadwalItems>> createJadwal(@Header("User-ID") int id,
-                                      @Header("Token") String token);
+    Call<JadwalItems> createJadwal(@Header("User-ID") int id,
+                                   @Header("Token") String token,
+                                   @Body JadwalItems jadwalItems);
 }

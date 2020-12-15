@@ -1,6 +1,7 @@
 package com.example.busapplication.ui.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.busapplication.R;
 import com.example.busapplication.data.model.JadwalItems;
+import com.example.busapplication.ui.schedule.ScheduleActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,22 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         holder.no_polisi.setText(jadwalItemsList.get(position).getNo_polisi());
         holder.tgl_perjalanan.setText(jadwalItemsList.get(position).getTgl_perjalanan());
 //        holder.bind(jadwalItemsList.get(position));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ScheduleActivity.class);
+                intent.putExtra(ScheduleActivity.EXTRA_NAME_BUS,jadwalItemsList.get(position).getNama_bus());
+                intent.putExtra(ScheduleActivity.EXTRA_POLICE_BUS,jadwalItemsList.get(position).getNo_polisi());
+                intent.putExtra(ScheduleActivity.EXTRA_SEAT_BUS,jadwalItemsList.get(position).getJmlh_kursi());
+                intent.putExtra(ScheduleActivity.EXTRA_FROM_BUS,jadwalItemsList.get(position).getKota_asal());
+                intent.putExtra(ScheduleActivity.EXTRA_TO_BUS,jadwalItemsList.get(position).getKota_tujuan());
+                intent.putExtra(ScheduleActivity.EXTRA_DATE_BUS,jadwalItemsList.get(position).getTgl_perjalanan());
+                intent.putExtra(ScheduleActivity.EXTRA_TO_BUS,jadwalItemsList.get(position).getKota_tujuan());
+                intent.putExtra(ScheduleActivity.EXTRA_ID,jadwalItemsList.get(position).getId_jadwal());
+                context.startActivity(intent);
+            }
+        });
 
     }
 

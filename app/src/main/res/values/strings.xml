@@ -16,10 +16,14 @@
     <string name="password">Password</string>
 
     <string name="login">Login</string>
+    <string name="logout">Log Out</string>
     <string name="register">Register</string>
+
+    <string name="delete">Delete</string>
 
 
     <!--    Jadwal List String-->
+    <string name="id_jadwal">ID JADWAL</string>
     <string name="bus_name">Nama Bus</string>
     <string name="bus_police_number">No Polisi </string>
     <string name="bus_seat_total">Sisa Kursi</string>
