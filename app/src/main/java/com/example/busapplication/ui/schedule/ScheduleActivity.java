@@ -3,6 +3,7 @@ package com.example.busapplication.ui.schedule;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.ui.AppBarConfiguration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +26,7 @@ import com.example.busapplication.MainActivity;
 import com.example.busapplication.R;
 import com.example.busapplication.data.api.ApiServices;
 import com.example.busapplication.data.api.NetworkService;
+import com.example.busapplication.data.model.JadwalItems;
 import com.example.busapplication.data.model.SeatItems;
 import com.example.busapplication.data.repository.SessionManager;
 import com.example.busapplication.ui.home.HomeAdapter;
@@ -40,9 +42,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.busapplication.data.repository.SessionManager.USER_ID;
+import static com.example.busapplication.data.repository.SessionManager.USER_NAME;
 import static com.example.busapplication.data.repository.SessionManager.USER_TOKEN;
 
 public class ScheduleActivity extends AppCompatActivity {
+    private AppBarConfiguration mAppBarConfiguration;
 
     EditText mEdtNameBus,mEdtPoliceBus,mEdtfromTo,mEdtGoTo
             , mEdtDateGo, mCountSeat, mIdJadwal;
@@ -52,11 +56,11 @@ public class ScheduleActivity extends AppCompatActivity {
 
     Toolbar toolbar;
 
-    private String id_jadwal,nama_bus,no_polisi,jumlah_kursi,kota_asal,
-            kota_tujuan, jadwal_perjalanan;
+    private String id_jadwal,nama_bus,no_polisi,kota_asal,
+            kota_tujuan, jadwal_perjalanan,fetchIdSeat,cnvrtJmlh_kursi;
 
-    private String fetchToken;
-    private int fetchId;
+    private String fetchToken,fetchName;
+    private int fetchId,jumlah_kursi;
     private int fetchCountSeat;
 
     private String getSeat;
@@ -68,7 +72,7 @@ public class ScheduleActivity extends AppCompatActivity {
     public static String EXTRA_NAME_BUS = "extra_model";
     public static String EXTRA_POLICE_BUS = "extra_police";
     public static String EXTRA_TIPE_BUS = "extra_tipe";
-    public static String EXTRA_SEAT_BUS = "extra_seat";
+    public static int EXTRA_SEAT_BUS = 0;
     public static String EXTRA_FROM_BUS = "extra_from";
     public static String EXTRA_TO_BUS = "extra_to";
     public static String EXTRA_DATE_BUS = "extra_date";
@@ -91,6 +95,7 @@ public class ScheduleActivity extends AppCompatActivity {
         SessionManager sessionManager = new SessionManager(this);
         fetchId = sessionManager.sharedPreferences.getInt(USER_ID,0);
         fetchToken = sessionManager.sharedPreferences.getString(USER_TOKEN, "");
+        fetchName = sessionManager.sharedPreferences.getString(USER_NAME, "");
 
         initView();
         initBindHolder();
@@ -102,16 +107,28 @@ public class ScheduleActivity extends AppCompatActivity {
         if (isEdit){
             actionBarTittle = "Ubah";
             mBtnJadwal.setText("Ubah");
+            bindView();
             mBtnJadwal.setOnClickListener(updateData);
             mIdJadwal.setFocusable(false);
 
         }else {
             actionBarTittle = "Tambah";
             mBtnJadwal.setText("Simpan");
+            mIdJadwal.setText("ID akan Terinput Otomatis...");
+            mIdJadwal.setFocusable(false);
             mBtnJadwal.setOnClickListener(saveData);
 
         }
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+// ...
+// Display icon in the toolbar
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+////        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+//        getSupportActionBar().setDisplayUseLogoEnabled(true);
+//        getSupportActionBar().setTitle(actionBarTittle);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
@@ -138,6 +155,7 @@ public class ScheduleActivity extends AppCompatActivity {
 //            MenuItem itemSearch = menu.findItem(R.id.action_setting);
 //            itemSearch.setVisible(false);
 //            getMenuInflater().inflate(R.menu.menu, menu);
+            return true;
 
         }
 
@@ -258,6 +276,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     seatItems = response.body();
                     fetchCountSeat = seatItems.getKapasitas_kursi();
+                    fetchIdSeat = seatItems.getId_seat();
                     mCountSeat.setText(String.valueOf(fetchCountSeat));
 
                 }
@@ -286,19 +305,45 @@ public class ScheduleActivity extends AppCompatActivity {
     View.OnClickListener saveData = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mIdJadwal.setText("ID akan Terinput Otomatis...");
-            mIdJadwal.setFocusable(false);
             if (mEdtNameBus.getText() == null){
                 mEdtNameBus.setSelectAllOnFocus(true);
                 mEdtNameBus.selectAll();
                 Toast.makeText(ScheduleActivity.this, "Data Kosong, Isi Terlebih Dahulu!!!", Toast.LENGTH_SHORT).show();
             }
             else {
+                bindView();
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String created_at = df.format(c.getTime());
+                String updated_at =  null;
+//                jumlah_kursi = Integer.parseInt(cnvrtJmlh_kursi);
 
-                bindView();
+
+
+                JadwalItems items = new JadwalItems(fetchId,nama_bus,no_polisi,kota_asal,kota_tujuan,
+                        fetchCountSeat,jadwal_perjalanan,fetchIdSeat,created_at,updated_at
+                        ,fetchName);
+
+                ApiServices apiServices = NetworkService.getRetrofit().create(ApiServices.class);
+                apiServices.createJadwal(fetchId,fetchToken,items).enqueue(new Callback<JadwalItems>() {
+                    @Override
+                    public void onResponse(Call<JadwalItems> call, Response<JadwalItems> response) {
+                        if (response.isSuccessful()){
+                            Toast.makeText(ScheduleActivity.this, "DATA HAS BEN SAVED...", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(ScheduleActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                        else {
+                            Toast.makeText(ScheduleActivity.this, "FAILED DATA SAVED...", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<JadwalItems> call, Throwable t) {
+                        Toast.makeText(ScheduleActivity.this, "CONNECTION FAILURE....", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
 
 
 
@@ -327,12 +372,22 @@ public class ScheduleActivity extends AppCompatActivity {
 
     private void bindView(){
         id_jadwal = mIdJadwal.getText().toString().trim();
-        nama_bus = mEdtNameBus.getText().toString();
-        no_polisi = mEdtPoliceBus.getText().toString();
-        kota_asal = mEdtfromTo.getText().toString();
-        kota_tujuan = mEdtGoTo.getText().toString();
-        jadwal_perjalanan = mEdtDateGo.getText().toString();
-       jumlah_kursi = mCountSeat.getText().toString();
+        nama_bus = mEdtNameBus.getText().toString().trim();
+        no_polisi = mEdtPoliceBus.getText().toString().trim();
+        kota_asal = mEdtfromTo.getText().toString().trim();
+        kota_tujuan = mEdtGoTo.getText().toString().trim();
+        jadwal_perjalanan = mEdtDateGo.getText().toString().trim();
+        Integer i = jumlah_kursi;
+        cnvrtJmlh_kursi = i.toString();
+        cnvrtJmlh_kursi = mCountSeat.getText().toString().trim();
+
+//        try{
+//            jumlah_kursi = Integer.parseInt(mCountSeat.getText().toString());
+//        }catch(Exception e){
+//            Toast.makeText(ScheduleActivity.this, "ERROR....", Toast.LENGTH_SHORT).show();
+//        }
+
+
         return;
     }
 
@@ -341,7 +396,7 @@ public class ScheduleActivity extends AppCompatActivity {
         id_jadwal = getIntent().getStringExtra(EXTRA_ID);
         nama_bus = getIntent().getStringExtra(EXTRA_NAME_BUS);
         no_polisi = getIntent().getStringExtra(EXTRA_POLICE_BUS);
-        jumlah_kursi = getIntent().getStringExtra(EXTRA_SEAT_BUS);
+        jumlah_kursi = getIntent().getIntExtra(String.valueOf(EXTRA_SEAT_BUS),0);
         kota_asal = getIntent().getStringExtra(EXTRA_FROM_BUS);
         kota_tujuan = getIntent().getStringExtra(EXTRA_TO_BUS);
         jadwal_perjalanan = getIntent().getStringExtra(EXTRA_DATE_BUS);

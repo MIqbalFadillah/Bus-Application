@@ -55,7 +55,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                 Intent intent = new Intent(context, ScheduleActivity.class);
                 intent.putExtra(ScheduleActivity.EXTRA_NAME_BUS,jadwalItemsList.get(position).getNama_bus());
                 intent.putExtra(ScheduleActivity.EXTRA_POLICE_BUS,jadwalItemsList.get(position).getNo_polisi());
-                intent.putExtra(ScheduleActivity.EXTRA_SEAT_BUS,jadwalItemsList.get(position).getJmlh_kursi());
+                intent.putExtra(String.valueOf(ScheduleActivity.EXTRA_SEAT_BUS),jadwalItemsList.get(position).getJmlh_kursi());
                 intent.putExtra(ScheduleActivity.EXTRA_FROM_BUS,jadwalItemsList.get(position).getKota_asal());
                 intent.putExtra(ScheduleActivity.EXTRA_TO_BUS,jadwalItemsList.get(position).getKota_tujuan());
                 intent.putExtra(ScheduleActivity.EXTRA_DATE_BUS,jadwalItemsList.get(position).getTgl_perjalanan());

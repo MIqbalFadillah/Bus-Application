@@ -6,7 +6,7 @@ public class JadwalItems {
     @SerializedName("id_jadwal")
     private String id_jadwal;
     @SerializedName("id_user")
-    private String id_user;
+    private int id_user;
     @SerializedName("nama_admin")
     private String nama_admin;
     @SerializedName("nama_bus")
@@ -16,7 +16,7 @@ public class JadwalItems {
     @SerializedName("id_seat")
     private String id_seat;
     @SerializedName("jmlh_kursi")
-    private String jmlh_kursi;
+    private int jmlh_kursi;
     @SerializedName("tgl_perjalanan")
     private String tgl_perjalanan;
     @SerializedName("kota_asal")
@@ -28,6 +28,25 @@ public class JadwalItems {
     @SerializedName("updated_at")
     private String updated_at;
 
+    public JadwalItems(Integer id_user,String nama_bus,String no_polisi,
+                       String kota_asal,String kota_tujuan,Integer jmlh_kursi,
+                       String tgl_perjalanan,String id_seat,
+                       String created_at,String updated_at,String nama_admin){
+
+        this.id_user =  id_user;
+        this.nama_bus = nama_bus;
+        this.id_seat = id_seat;
+        this.nama_admin = nama_admin;
+        this.no_polisi = no_polisi;
+        this.jmlh_kursi = jmlh_kursi;
+        this.tgl_perjalanan = tgl_perjalanan;
+        this.kota_asal = kota_asal;
+        this.kota_tujuan = kota_tujuan;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+
+    }
+
 
     public String getId_jadwal() {
         return id_jadwal;
@@ -37,11 +56,11 @@ public class JadwalItems {
         this.id_jadwal = id_jadwal;
     }
 
-    public String getId_user() {
+    public int getId_user() {
         return id_user;
     }
 
-    public void setId_user(String id_user) {
+    public void setId_user(int id_user) {
         this.id_user = id_user;
     }
 
@@ -77,11 +96,11 @@ public class JadwalItems {
         this.id_seat = id_seat;
     }
 
-    public String getJmlh_kursi() {
+    public int getJmlh_kursi() {
         return jmlh_kursi;
     }
 
-    public void setJmlh_kursi(String jmlh_kursi) {
+    public void setJmlh_kursi(int jmlh_kursi) {
         this.jmlh_kursi = jmlh_kursi;
     }
 
@@ -124,6 +143,7 @@ public class JadwalItems {
     public void setTgl_perjalanan(String tgl_perjalanan) {
         this.tgl_perjalanan = tgl_perjalanan;
     }
-//
+
+//=============Public Input Class=================
 
 }
