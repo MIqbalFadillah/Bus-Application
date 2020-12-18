@@ -31,6 +31,8 @@ import com.example.busapplication.data.model.SeatItems;
 import com.example.busapplication.data.repository.SessionManager;
 import com.example.busapplication.ui.home.HomeAdapter;
 import com.example.busapplication.ui.home.HomeFragment;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,7 +47,7 @@ import static com.example.busapplication.data.repository.SessionManager.USER_ID;
 import static com.example.busapplication.data.repository.SessionManager.USER_NAME;
 import static com.example.busapplication.data.repository.SessionManager.USER_TOKEN;
 
-public class ScheduleActivity extends AppCompatActivity {
+public class ScheduleActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private AppBarConfiguration mAppBarConfiguration;
 
     EditText mEdtNameBus,mEdtPoliceBus,mEdtfromTo,mEdtGoTo
@@ -63,7 +65,7 @@ public class ScheduleActivity extends AppCompatActivity {
     private int fetchId,jumlah_kursi;
     private int fetchCountSeat;
 
-    private String getSeat;
+    private String getSeat, fetchDate, fetchTime;
     private SeatItems seatItems;
 
 
@@ -357,6 +359,40 @@ public class ScheduleActivity extends AppCompatActivity {
 
     }
 
+
+//=====================DateTimePicker================
+
+    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+        fetchTime = "You picked the following time: "+hourOfDay+"h"+minute+"m"+second;
+
+    }
+
+
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+         fetchDate = "You picked the following date: "+dayOfMonth+"/"+(monthOfYear+1)+"/"+year;
+
+    }
+//====================DateTimeListener=======================
+    View.OnClickListener fetchDateTime = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Calendar now = Calendar.getInstance();
+            DatePickerDialog dpd = DatePickerDialog.newInstance(
+                    ScheduleActivity.this,
+                    now.get(Calendar.YEAR), // Initial year selection
+                    now.get(Calendar.MONTH), // Initial month selection
+                    now.get(Calendar.DAY_OF_MONTH) // Inital day selection
+            );
+            dpd.show(onTimeSet());
+        }
+    };
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+
     private void initView(){
         mIdJadwal = findViewById(R.id.edt_sc_id_jadwal);
         mEdtNameBus = findViewById(R.id.edt_sc_name_bus);
@@ -376,17 +412,11 @@ public class ScheduleActivity extends AppCompatActivity {
         no_polisi = mEdtPoliceBus.getText().toString().trim();
         kota_asal = mEdtfromTo.getText().toString().trim();
         kota_tujuan = mEdtGoTo.getText().toString().trim();
-        jadwal_perjalanan = mEdtDateGo.getText().toString().trim();
+//        jadwal_perjalanan = mEdtDateGo.getText().toString().trim();
+        mEdtDateGo.setOnClickListener(fetchDateTime);
         Integer i = jumlah_kursi;
         cnvrtJmlh_kursi = i.toString();
         cnvrtJmlh_kursi = mCountSeat.getText().toString().trim();
-
-//        try{
-//            jumlah_kursi = Integer.parseInt(mCountSeat.getText().toString());
-//        }catch(Exception e){
-//            Toast.makeText(ScheduleActivity.this, "ERROR....", Toast.LENGTH_SHORT).show();
-//        }
-
 
         return;
     }
@@ -409,4 +439,6 @@ public class ScheduleActivity extends AppCompatActivity {
         mEdtDateGo.setText(jadwal_perjalanan);
 
     }
+
+
 }

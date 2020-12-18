@@ -11,13 +11,6 @@
 
 
 
-<!--    <include-->
-<!--        android:id="@+id/toolbar"-->
-<!--        layout="@layout/toolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -178,7 +171,8 @@
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:ems="10"
             android:hint="@string/bus_due_date"
-            android:inputType="text"
+            android:inputType="none"
+            android:focusable="false"
             android:textSize="14sp"
             android:paddingStart="12sp"
             android:background="@drawable/cutom_input_text"
