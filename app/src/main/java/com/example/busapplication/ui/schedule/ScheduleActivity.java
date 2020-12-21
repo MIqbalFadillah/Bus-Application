@@ -4,22 +4,23 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.busapplication.MainActivity;
@@ -29,15 +30,13 @@ import com.example.busapplication.data.api.NetworkService;
 import com.example.busapplication.data.model.JadwalItems;
 import com.example.busapplication.data.model.SeatItems;
 import com.example.busapplication.data.repository.SessionManager;
-import com.example.busapplication.ui.home.HomeAdapter;
-import com.example.busapplication.ui.home.HomeFragment;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,14 +46,18 @@ import static com.example.busapplication.data.repository.SessionManager.USER_ID;
 import static com.example.busapplication.data.repository.SessionManager.USER_NAME;
 import static com.example.busapplication.data.repository.SessionManager.USER_TOKEN;
 
-public class ScheduleActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class ScheduleActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
 
     EditText mEdtNameBus,mEdtPoliceBus,mEdtfromTo,mEdtGoTo
-            , mEdtDateGo, mCountSeat, mIdJadwal;
+            , mEdtDateGo, mCountSeat, mIdJadwal,mEdtTimeGo;
     Button mBtnJadwal;
     Spinner spinner;
     TextView tst;
+
+    Calendar calendar;
+    DatePickerDialog.OnDateSetListener dateSetListener;
+
 
     Toolbar toolbar;
 
@@ -117,6 +120,7 @@ public class ScheduleActivity extends AppCompatActivity implements DatePickerDia
             actionBarTittle = "Tambah";
             mBtnJadwal.setText("Simpan");
             mIdJadwal.setText("ID akan Terinput Otomatis...");
+            bindView();
             mIdJadwal.setFocusable(false);
             mBtnJadwal.setOnClickListener(saveData);
 
@@ -146,6 +150,9 @@ public class ScheduleActivity extends AppCompatActivity implements DatePickerDia
         // attaching data adapter to spinner
         spinner.setAdapter(dataAdapter);
         spinner.setOnItemSelectedListener(spinnerButton);
+
+        calendar = Calendar.getInstance();
+        getDateListener();
 
     }
 
@@ -314,9 +321,11 @@ public class ScheduleActivity extends AppCompatActivity implements DatePickerDia
             }
             else {
                 bindView();
-                Calendar c = Calendar.getInstance();
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String created_at = df.format(c.getTime());
+//                Calendar c = Calendar.getInstance();
+//                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                fetchDate = mEdtDateGo.getText().toString().trim();
+                fetchTime = mEdtTimeGo.getText().toString().trim();
+                String created_at = fetchDate + " " + fetchTime;
                 String updated_at =  null;
 //                jumlah_kursi = Integer.parseInt(cnvrtJmlh_kursi);
 
@@ -361,36 +370,58 @@ public class ScheduleActivity extends AppCompatActivity implements DatePickerDia
 
 
 //=====================DateTimePicker================
+    private void getDateListener(){
+        dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                setDate();
+            }
+        };
+    }
 
-    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
-        fetchTime = "You picked the following time: "+hourOfDay+"h"+minute+"m"+second;
+    private void getTimeListener(){
 
     }
 
-
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-         fetchDate = "You picked the following date: "+dayOfMonth+"/"+(monthOfYear+1)+"/"+year;
+    private void setDate(){
+        String myFormat = "yyyy-MM-dd";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        mEdtDateGo.setText(sdf.format(calendar.getTime()));
 
     }
-//====================DateTimeListener=======================
-    View.OnClickListener fetchDateTime = new View.OnClickListener() {
+
+    View.OnClickListener setFetchDate = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Calendar now = Calendar.getInstance();
-            DatePickerDialog dpd = DatePickerDialog.newInstance(
-                    ScheduleActivity.this,
-                    now.get(Calendar.YEAR), // Initial year selection
-                    now.get(Calendar.MONTH), // Initial month selection
-                    now.get(Calendar.DAY_OF_MONTH) // Inital day selection
-            );
-            dpd.show(onTimeSet());
+            new DatePickerDialog(ScheduleActivity.this,dateSetListener,
+                    calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+
         }
     };
 
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
+    View.OnClickListener setFetchTime = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Calendar mTime = Calendar.getInstance();
+            int hour = mTime.get(Calendar.HOUR_OF_DAY);
+            int minute = mTime.get(Calendar.MINUTE);
 
-    }
+            TimePickerDialog mTimePicker;
+            mTimePicker = new TimePickerDialog(ScheduleActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    mEdtTimeGo.setText(hourOfDay + ":" + minute);
+
+                }
+            }, hour, minute, true);
+            mTimePicker.setTitle("Selected Time");
+            mTimePicker.show();
+
+        }
+    };
 
 
     private void initView(){
@@ -400,6 +431,7 @@ public class ScheduleActivity extends AppCompatActivity implements DatePickerDia
         mEdtfromTo = findViewById(R.id.edt_sc_from_to);
         mEdtGoTo = findViewById(R.id.edt_sc_go_to);
         mEdtDateGo = findViewById(R.id.edt_sc_date_bus_go);
+        mEdtTimeGo = findViewById(R.id.edt_sc_time_bus_go);
         mBtnJadwal = findViewById(R.id.btn_jadwal_add);
         mCountSeat = findViewById(R.id.edt_sc_seat_bus);
         spinner = findViewById(R.id.spinner_Seat);
@@ -413,7 +445,8 @@ public class ScheduleActivity extends AppCompatActivity implements DatePickerDia
         kota_asal = mEdtfromTo.getText().toString().trim();
         kota_tujuan = mEdtGoTo.getText().toString().trim();
 //        jadwal_perjalanan = mEdtDateGo.getText().toString().trim();
-        mEdtDateGo.setOnClickListener(fetchDateTime);
+        mEdtDateGo.setOnClickListener(setFetchDate);
+        mEdtTimeGo.setOnClickListener(setFetchTime);
         Integer i = jumlah_kursi;
         cnvrtJmlh_kursi = i.toString();
         cnvrtJmlh_kursi = mCountSeat.getText().toString().trim();

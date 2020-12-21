@@ -176,12 +176,34 @@
             android:textSize="14sp"
             android:paddingStart="12sp"
             android:background="@drawable/cutom_input_text"
+            android:layout_marginRight="190dp"
             android:drawableEnd="@drawable/ic_baseline_date_range"
             android:paddingEnd="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.8"
+            app:layout_constraintHorizontal_bias="0.52"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/edt_sc_from_to"/>
+
+        <EditText
+            android:id="@+id/edt_sc_time_bus_go"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/cutom_input_text"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:ems="10"
+            android:hint="@string/bus_due_time"
+            android:drawableEnd="@drawable/ic_time"
+            android:inputType="none"
+            android:focusable="false"
+            android:textSize="14sp"
+            android:paddingEnd="12sp"
+            android:paddingStart="12sp"
+            android:layout_marginLeft="190dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.52"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edt_sc_go_to"/>
 
         <Button
             android:id="@+id/btn_jadwal_add"
