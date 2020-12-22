@@ -9,9 +9,11 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface ApiServices {
@@ -29,4 +31,15 @@ public interface ApiServices {
     Call<JadwalItems> createJadwal(@Header("User-ID") int id,
                                    @Header("Token") String token,
                                    @Body JadwalItems jadwalItems);
+
+    @PUT("jadwal/update/{query}")
+    Call<JadwalItems> updateJadwal(@Header("User-ID") int id,
+                                   @Header("Token") String token,
+                                   @Path("query") String query,
+                                   @Body JadwalItems jadwalItems);
+
+    @DELETE("jadwal/delete/{query}")
+    Call<JadwalItems> deleteJadwal(@Header("User-ID") int id,
+                                   @Header("Token") String token,
+                                   @Path("query") String query);
 }

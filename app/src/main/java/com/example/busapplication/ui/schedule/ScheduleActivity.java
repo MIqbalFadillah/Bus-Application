@@ -128,13 +128,7 @@ public class ScheduleActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-// ...
-// Display icon in the toolbar
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
-////        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
-//        getSupportActionBar().setDisplayUseLogoEnabled(true);
-//        getSupportActionBar().setTitle(actionBarTittle);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
@@ -306,6 +300,48 @@ public class ScheduleActivity extends AppCompatActivity {
     View.OnClickListener updateData = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            if (mEdtNameBus.getText() == null){
+                mEdtNameBus.setSelectAllOnFocus(true);
+                mEdtNameBus.selectAll();
+                Toast.makeText(ScheduleActivity.this, "Data Kosong, Isi Terlebih Dahulu!!!", Toast.LENGTH_SHORT).show();
+            } else{
+                bindView();
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                fetchDate = mEdtDateGo.getText().toString().trim();
+                fetchTime = mEdtTimeGo.getText().toString().trim();
+                String created_at = df.format(c.getTime());;
+                String updated_at =  null;
+                jadwal_perjalanan = fetchDate + " " + fetchTime;
+//                jumlah_kursi = Integer.parseInt(cnvrtJmlh_kursi);
+
+
+
+                JadwalItems items = new JadwalItems(fetchId,nama_bus,no_polisi,kota_asal,kota_tujuan,
+                        fetchCountSeat,jadwal_perjalanan,fetchIdSeat,created_at,updated_at
+                        ,fetchName);
+
+                ApiServices apiServices = NetworkService.getRetrofit().create(ApiServices.class);
+                apiServices.updateJadwal(fetchId,fetchToken,id_jadwal,items).enqueue(new Callback<JadwalItems>() {
+                    @Override
+                    public void onResponse(Call<JadwalItems> call, Response<JadwalItems> response) {
+                        if (response.isSuccessful()){
+                            Toast.makeText(ScheduleActivity.this, "DATA HAS BEN SAVED...", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(ScheduleActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                        else {
+                            Toast.makeText(ScheduleActivity.this, "FAILED DATA SAVED...", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<JadwalItems> call, Throwable t) {
+                        Toast.makeText(ScheduleActivity.this, "CONNECTION FAILURE....", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
 
         }
     };
@@ -321,12 +357,13 @@ public class ScheduleActivity extends AppCompatActivity {
             }
             else {
                 bindView();
-//                Calendar c = Calendar.getInstance();
-//                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 fetchDate = mEdtDateGo.getText().toString().trim();
                 fetchTime = mEdtTimeGo.getText().toString().trim();
-                String created_at = fetchDate + " " + fetchTime;
+                String created_at = df.format(c.getTime());;
                 String updated_at =  null;
+                jadwal_perjalanan = fetchDate + " " + fetchTime;
 //                jumlah_kursi = Integer.parseInt(cnvrtJmlh_kursi);
 
 
@@ -365,6 +402,25 @@ public class ScheduleActivity extends AppCompatActivity {
 
 //=====================Menghapus Data================
     private void DeletedData(){
+        ApiServices apiServices = NetworkService.getRetrofit().create(ApiServices.class);
+        apiServices.deleteJadwal(fetchId,fetchToken,id_jadwal).enqueue(new Callback<JadwalItems>() {
+            @Override
+            public void onResponse(Call<JadwalItems> call, Response<JadwalItems> response) {
+                if (response.isSuccessful()){
+                    Toast.makeText(ScheduleActivity.this, "DATA HAS BEN DELETED...", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ScheduleActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(ScheduleActivity.this, "FAILED DATA DELETE...", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JadwalItems> call, Throwable t) {
+                Toast.makeText(ScheduleActivity.this, "CONNECTION FAILURE....", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -464,12 +520,16 @@ public class ScheduleActivity extends AppCompatActivity {
         kota_tujuan = getIntent().getStringExtra(EXTRA_TO_BUS);
         jadwal_perjalanan = getIntent().getStringExtra(EXTRA_DATE_BUS);
 
+        String trunchDate = jadwal_perjalanan.substring(0, Math.min(jadwal_perjalanan.length(), 10));
+        String trunchTime = jadwal_perjalanan.substring(10, Math.min(jadwal_perjalanan.length(), 18));
+
         mIdJadwal.setText(id_jadwal);
         mEdtNameBus.setText(nama_bus);
         mEdtPoliceBus.setText(no_polisi);
         mEdtfromTo.setText(kota_asal);
         mEdtGoTo.setText(kota_tujuan);
-        mEdtDateGo.setText(jadwal_perjalanan);
+        mEdtDateGo.setText(trunchDate);
+        mEdtTimeGo.setText(trunchTime);
 
     }
 
