@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_gravity="center"
     android:layout_marginTop="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
@@ -82,10 +81,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="@string/bus_police_number"/>
-
         </RelativeLayout>
-
-
 
     </LinearLayout>
 
