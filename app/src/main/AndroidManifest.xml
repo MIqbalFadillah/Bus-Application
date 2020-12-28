@@ -13,8 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.schedule.ScheduleActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.seat.SeatBooking"></activity>
+        <activity
+            android:name=".ui.schedule.ScheduleActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <uses-library
             android:name="org.apache.http.legacy"
